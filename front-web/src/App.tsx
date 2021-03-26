@@ -1,13 +1,12 @@
 import './core/assets/styles/custom.scss';
 import './app.scss';
-import React, { useState } from 'react';
+import Navbar from './core/components/Navbar';
 
 const App = () => {
-     return (
-          <div className="container mt-5">
-<h1>app</h1>
-          </div>
-     );
+
+    return (
+      <Navbar />
+    );
 }
 
 export default App;
