@@ -1,5 +1,6 @@
 import ProductCard from './components/ProductCard/Index';
 import './styles.scss';
+import { Link } from 'react-router-dom';
 
 const Catalog = () => (
     <div className="catalog-container">
@@ -7,13 +8,13 @@ const Catalog = () => (
             Catalogo de produtos
         </h1>
         <div className="catalog-products">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+        <Link to="/products/1"><ProductCard /></Link>
+        <Link to="/products/2"><ProductCard /></Link>
+        <Link to="/products/3"><ProductCard /></Link>
+        <Link to="/products/4"><ProductCard /></Link>
+        <Link to="/products/5"><ProductCard /></Link>
+        <Link to="/products/6"><ProductCard /></Link>
+        <Link to="/products/7"><ProductCard /></Link>
         </div>
         
     </div>
