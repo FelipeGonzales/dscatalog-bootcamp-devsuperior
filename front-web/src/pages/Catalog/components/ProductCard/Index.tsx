@@ -1,6 +1,6 @@
 import './styles.scss'
 import ProductPrice from '../ProductPrice/Index'
-import { Product } from '../../../../core/types/Product';
+import { Product } from 'core/types/Product';
 
 type Props = {
     product: Product;
