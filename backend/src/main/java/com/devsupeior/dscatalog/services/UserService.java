@@ -13,10 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import com.devsupeior.dscatalog.dto.RoleDTO;
 import com.devsupeior.dscatalog.dto.UserDTO;
 import com.devsupeior.dscatalog.dto.UserInsertDTO;
+import com.devsupeior.dscatalog.dto.UserUpdateDTO;
 import com.devsupeior.dscatalog.entities.Role;
 import com.devsupeior.dscatalog.entities.User;
 import com.devsupeior.dscatalog.repositories.RoleRepository;
@@ -60,7 +60,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserDTO update(Long id, UserDTO dto) {
+	public UserDTO update(Long id, UserUpdateDTO dto) {
 		try {
 			User entity = repository.getOne(id);
 			copyDtoToEntity(dto,entity);
