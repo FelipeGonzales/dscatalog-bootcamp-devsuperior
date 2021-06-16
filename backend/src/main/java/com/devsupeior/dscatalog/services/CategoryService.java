@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsupeior.dscatalog.dto.CategoryDTO;
 import com.devsupeior.dscatalog.entities.Category;
 import com.devsupeior.dscatalog.repositories.CategoryRepository;
-import com.devsupeior.dscatalog.services.exceptions.DataBaseException;
+import com.devsupeior.dscatalog.services.exceptions.DatabaseException;
 import com.devsupeior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -23,18 +23,19 @@ public class CategoryService {
 
 	@Autowired
 	private CategoryRepository repository;
-	
+
 	@Transactional(readOnly = true)
 	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
 		Page<Category> list = repository.findAll(pageRequest);
+
 		return list.map(x -> new CategoryDTO(x));
-	
+
 	}
 
 	@Transactional(readOnly = true)
 	public CategoryDTO findById(Long id) {
 		Optional<Category> obj = repository.findById(id);
-		Category entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entidade não encontrada"));
+		Category entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		return new CategoryDTO(entity);
 	}
 
@@ -43,33 +44,31 @@ public class CategoryService {
 		Category entity = new Category();
 		entity.setName(dto.getName());
 		entity = repository.save(entity);
+
 		return new CategoryDTO(entity);
 	}
 
 	@Transactional
 	public CategoryDTO update(Long id, CategoryDTO dto) {
 		try {
-			Category entity = repository.getOne(id);
-			entity.setName(dto.getName());
-			entity = repository.save(entity);
-			return new CategoryDTO(entity);
-		}
-		catch (EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Id não encontrado" + id);
-		}
+		Category entity = repository.getOne(id); //Pega as informações sem ir ao banco de dados primeiro
 		
+		entity.setName(dto.getName());
+		entity = repository.save(entity);
+		return new CategoryDTO(entity);
+		} catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Id not found: " + id);
+		}
 	}
 
+	
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
-		}
-		catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException("Id não encontrado " + id);
-		}
-		catch (DataIntegrityViolationException e) {
-			throw new DataBaseException("Violação de integridade");
-		}
+		} catch(EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("Id not found " + id);
+		} catch(DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity violation");
+		}		
 	}
-	
 }

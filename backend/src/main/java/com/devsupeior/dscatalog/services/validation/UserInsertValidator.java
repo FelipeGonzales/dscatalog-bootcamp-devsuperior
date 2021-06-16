@@ -13,7 +13,6 @@ import com.devsupeior.dscatalog.entities.User;
 import com.devsupeior.dscatalog.repositories.UserRepository;
 import com.devsupeior.dscatalog.resources.exceptions.FieldMessage;
 
-
 public class UserInsertValidator implements ConstraintValidator<UserInsertValid, UserInsertDTO> {
 	
 	@Autowired
@@ -29,8 +28,9 @@ public class UserInsertValidator implements ConstraintValidator<UserInsertValid,
 		List<FieldMessage> list = new ArrayList<>();
 		
 		User user = repository.findByEmail(dto.getEmail());
-		if (user != null) {
-			list.add(new FieldMessage("Email", "Email já existe"));	
+		
+		if(user != null) {
+			list.add(new FieldMessage("email", "Email já cadastrado"));
 		}
 		
 		for (FieldMessage e : list) {

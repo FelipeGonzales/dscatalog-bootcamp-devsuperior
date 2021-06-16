@@ -20,7 +20,7 @@ import com.devsupeior.dscatalog.entities.Category;
 import com.devsupeior.dscatalog.entities.Product;
 import com.devsupeior.dscatalog.repositories.CategoryRepository;
 import com.devsupeior.dscatalog.repositories.ProductRepository;
-import com.devsupeior.dscatalog.services.exceptions.DataBaseException;
+import com.devsupeior.dscatalog.services.exceptions.DatabaseException;
 import com.devsupeior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -31,27 +31,27 @@ public class ProductService {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(Long categoryId,String name, PageRequest pageRequest) {
+	public Page<ProductDTO> findAllPaged(Long categoryId, String name, PageRequest pageRequest) {
 		List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getOne(categoryId));
-		Page<Product> page = repository.find(categories, name.trim(), pageRequest);
-		repository.findProductsWithCategories(page.getContent());
-		return page.map(x -> new ProductDTO(x, x.getCategories()));
-	
+		Page<Product> list = repository.find(categories, name, pageRequest);
+
+		return list.map(x -> new ProductDTO(x));
+
 	}
 
 	@Transactional(readOnly = true)
 	public ProductDTO findById(Long id) {
 		Optional<Product> obj = repository.findById(id);
-		Product entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entidade não encontrada"));
+		Product entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		return new ProductDTO(entity, entity.getCategories());
 	}
 
 	@Transactional
 	public ProductDTO insert(ProductDTO dto) {
 		Product entity = new Product();
-		copyDtoToEntity(dto,entity);
+		copyDtoToEntity(dto, entity);		
 		entity = repository.save(entity);
 		return new ProductDTO(entity);
 	}
@@ -59,42 +59,39 @@ public class ProductService {
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
 		try {
-			Product entity = repository.getOne(id);
-			copyDtoToEntity(dto,entity);
-			entity = repository.save(entity);
-			return new ProductDTO(entity);
+		Product entity = repository.getOne(id); //Pega as informações sem ir ao banco de dados primeiro
+		copyDtoToEntity(dto, entity);
+		entity = repository.save(entity);
+		return new ProductDTO(entity);
+		} catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Id not found: " + id);
 		}
-		catch (EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Id não encontrado" + id);
-		}
-		
 	}
 
+	
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
-		}
-		catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException("Id não encontrado " + id);
-		}
-		catch (DataIntegrityViolationException e) {
-			throw new DataBaseException("Violação de integridade");
-		}
+		} catch(EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("Id not found " + id);
+		} catch(DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity violation");
+		}		
 	}
 	
 	private void copyDtoToEntity(ProductDTO dto, Product entity) {
-		
 		entity.setName(dto.getName());
-		entity.setDate(dto.getDate());
 		entity.setDescription(dto.getDescription());
+		entity.setDate(dto.getDate());
 		entity.setImgUrl(dto.getImgUrl());
 		entity.setPrice(dto.getPrice());
 		
 		entity.getCategories().clear();
-		for (CategoryDTO catDto : dto.getCategories()) {
+		for(CategoryDTO catDto : dto.getCategories()) {
+			//Instanciar uma entidade sem acessar o banco GetOne
 			Category category = categoryRepository.getOne(catDto.getId());
+			
 			entity.getCategories().add(category);
 		}
 	}
-	
 }

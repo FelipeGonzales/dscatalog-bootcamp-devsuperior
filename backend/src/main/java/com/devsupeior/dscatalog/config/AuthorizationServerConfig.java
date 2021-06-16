@@ -20,8 +20,8 @@ import com.devsupeior.dscatalog.components.JwtTokenEnhancer;
 
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
-
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+	
 	@Value("${security.oauth2.client.client-id}")
 	private String clientId;
 	
@@ -30,7 +30,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	
 	@Value("${jwt.duration}")
 	private Integer jwtDuration;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
@@ -56,7 +56,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		clients.inMemory()
 		.withClient(clientId)
 		.secret(passwordEncoder.encode(clientSecret))
-		.scopes("read","write")
+		.scopes("read", "write")
 		.authorizedGrantTypes("password")
 		.accessTokenValiditySeconds(jwtDuration);
 	}
@@ -70,7 +70,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		endpoints.authenticationManager(authenticationManager)
 		.tokenStore(tokenStore)
 		.accessTokenConverter(accessTokenConverter)
-		.tokenEnhancer(chain); 
+		.tokenEnhancer(chain);
 	}
-
+	
+	
 }

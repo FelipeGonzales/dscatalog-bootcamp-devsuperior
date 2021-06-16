@@ -2,8 +2,6 @@ package com.devsupeior.dscatalog.resources;
 
 import java.net.URI;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,56 +18,57 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.devsupeior.dscatalog.dto.UserDTO;
-import com.devsupeior.dscatalog.dto.UserInsertDTO;
-import com.devsupeior.dscatalog.dto.UserUpdateDTO;
-import com.devsupeior.dscatalog.services.UserService;
+import com.devsupeior.dscatalog.dto.CategoryDTO;
+import com.devsupeior.dscatalog.services.CategoryService;
 
 @RestController
-@RequestMapping(value = "/users")
-public class UserResources {
-
+@RequestMapping(value = "/categories")
+public class CategoryResource {
+	
 	@Autowired
-	private UserService service;
+	private CategoryService service;
 	
 	@GetMapping
-	public ResponseEntity<Page<UserDTO>> findAll(
+	public ResponseEntity<Page<CategoryDTO>> findAll(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
-			@RequestParam(value = "orderBy", defaultValue = "firstName") String orderBy,
-			@RequestParam(value = "direction", defaultValue = "ASC") String direction
+			@RequestParam(value = "direction", defaultValue = "ASC") String direction,
+			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy
+			
 			) {
 		
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		
-	PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);	
-		
-		Page<UserDTO> list = service.findAllPaged(pageRequest);
+		Page<CategoryDTO> list = service.findAllPaged(pageRequest);
+				
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
-		UserDTO dto = service.findById(id);
+	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
+		CategoryDTO dto = service.findById(id);		
 		return ResponseEntity.ok().body(dto);
 	}
 	
 	@PostMapping
-	public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
-		UserDTO newDto = service.insert(dto);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(newDto.getId()).toUri();
-		return ResponseEntity.created(uri).body(newDto);
+	public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO dto) {
+		dto = service.insert(dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+		
+		return ResponseEntity.created(uri).body(dto);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> update(@PathVariable Long id,@Valid @RequestBody UserUpdateDTO dto) {
-		UserDTO newDto = service.update(id, dto);
-		return ResponseEntity.ok().body(newDto);
+	public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @RequestBody CategoryDTO dto) {
+		dto = service.update(id, dto);
+				
+		return ResponseEntity.ok().body(dto);
 	}
 	
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> delete(@PathVariable Long id) {
+	public ResponseEntity<CategoryDTO> delete(@PathVariable Long id) {
 		service.delete(id);
+				
 		return ResponseEntity.noContent().build();
 	}
 }

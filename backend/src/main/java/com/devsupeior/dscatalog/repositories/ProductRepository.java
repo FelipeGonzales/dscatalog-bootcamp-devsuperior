@@ -12,14 +12,11 @@ import com.devsupeior.dscatalog.entities.Category;
 import com.devsupeior.dscatalog.entities.Product;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>{
 	
 	@Query("SELECT DISTINCT obj FROM Product obj INNER JOIN obj.categories cats WHERE "
-			+ "(COALESCE(:categories) IS NULL OR cats IN :categories) AND "
-			+ "(LOWER(obj.name) LIKE LOWER(CONCAT('%',:name,'%')) )")
-	Page<Product> find(List<Category> categories, String name, Pageable pegeable);
+			+ "(COALESCE(:categories) IS NULL OR cats IN :categories) AND"
+			+ "(LOWER(obj.name) LIKE LOWER(CONCAT('%', :name, '%')) )")
 	
-	@Query("SELECT obj FROM Product obj JOIN FETCH obj.categories WHERE obj IN :products")
-	List<Product> findProductsWithCategories(List<Product> products);
-
+	Page<Product> find(List<Category> categories, String name, Pageable pageable);
 }

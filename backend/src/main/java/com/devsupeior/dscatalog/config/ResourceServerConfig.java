@@ -21,20 +21,20 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
-
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+	
 	@Autowired
 	private Environment env;
 	
 	@Autowired
 	private JwtTokenStore tokenStore;
 	
-	private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**"};
+	private static final String[] PUBLIC = {"/oauth/token", "/h2-console/**" };
 	
-	private static final String[] OPERATOR_OR_ADMIN = {"/products/**", "/categories/**" };
+	private static final String[] OPERATOR_OR_ADMIN = { "/products/**", "/categories/**"};
 	
 	private static final String[] ADMIN = {"/users/**"};
-	
+
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		resources.tokenStore(tokenStore);
@@ -43,10 +43,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		
-			//H2
-		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+		//Configuração para liberação do H2
+		if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
 			http.headers().frameOptions().disable();
-		}
+		}		
 		
 		http.authorizeRequests()
 		.antMatchers(PUBLIC).permitAll()
@@ -56,7 +56,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		.anyRequest().authenticated();
 		
 		http.cors().configurationSource(corsConfigurationSource());
-	} 
+	}
+	
 	
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
@@ -78,5 +79,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		return bean;
 	}	
-
+	
+	
 }

@@ -23,9 +23,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "tb_user")
-public class User implements UserDetails, Serializable{
+
+public class User implements UserDetails, Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -36,14 +38,13 @@ public class User implements UserDetails, Serializable{
 	private String email;
 	private String password;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER) //Força a busca de roles sempre que um usuário for carregado.
 	@JoinTable(name = "tb_user_role",
-	joinColumns = @JoinColumn(name = "user_id"),
-	inverseJoinColumns = @JoinColumn(name = "role_id"))
+				joinColumns = @JoinColumn(name = "user_id"),
+				inverseJoinColumns = @JoinColumn(name = "role_id"))	
 	private Set<Role> roles = new HashSet<>(); 
 	
-	public User() {
-	}
+	public User () {}
 
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		super();
@@ -93,6 +94,8 @@ public class User implements UserDetails, Serializable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	
 
 	public Set<Role> getRoles() {
 		return roles;
@@ -125,38 +128,36 @@ public class User implements UserDetails, Serializable{
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority()))
-				.collect(Collectors.toList());
+		
+		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return email;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
-
+	
+	
 }

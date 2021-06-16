@@ -1,9 +1,11 @@
 package com.devsupeior.dscatalog.services.exceptions;
 
-public class DataBaseException extends RuntimeException {
+public class DatabaseException extends RuntimeException {
+	
 	private static final long serialVersionUID = 1L;
 	
-	public DataBaseException(String msg) {
+	public DatabaseException(String msg) {
 		super(msg);
 	}
+
 }

@@ -20,28 +20,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/actuator/**");
 		
-		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", 
-				"/configuration/**", "/swagger-ui.html", "/webjars/**");
-;
+		web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**");
+
+	}
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 
 	@Override
 	@Bean
 	protected AuthenticationManager authenticationManager() throws Exception {
-		// TODO Auto-generated method stub
 		return super.authenticationManager();
 	}
-
-	  
+	
+	
+	
 	
 }
