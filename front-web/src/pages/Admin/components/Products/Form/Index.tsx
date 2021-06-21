@@ -1,16 +1,19 @@
 import BaseForm from '../../BaseForm/Index';
 import './styles.scss';
 import {makePrivateRequest, makeRequest} from 'core/utils/request';
-import {useForm} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Category } from 'core/types/Product';
+import Select from 'react-select';
 
 type FormState = {
     name: string;
     price: string;
     description: string;
     imagUrl:string;
+    categories: Category[];
 }
 
 type ParamsType = {
@@ -18,9 +21,11 @@ type ParamsType = {
 }
 
 const Form = () => {
-    const { register, handleSubmit, errors, setValue } = useForm<FormState>();
+    const { register, handleSubmit, errors, setValue, control } = useForm<FormState>();
     const history = useHistory() 
     const { productId } = useParams<ParamsType>();
+    const [isLoadingCategories, setIsLoadingCategories] = useState(false);
+    const [categories, setCategories] = useState<Category[]>([]);
     const isEditing = productId !== 'create';
     const formTitle = isEditing ? 'Editar produto' : 'Cadastrar um Produto';
 
@@ -77,17 +82,26 @@ return (
                                 </div>
                             )}
                         </div>
-                        {/* <select
-                    value={formData.category}
-                    className="form-control mb-5 input-base" 
-                    onChange={handleOnChange}
-                    name="category"
-                    >
-                        <option value="1">Livros</option>
-                        <option value="3">Computadores</option>
-                        <option value="2">Eletrônicos</option>
-                    </select>
-                    </select> */}
+                        <div className="margin-bottom-30">
+                            <Controller
+                                as={Select}
+                                name="categories"
+                                rules={{required: true}}
+                                control={control}
+                                isLoading={isLoadingCategories}
+                                classNamePrefix="categories-select"
+                                isMulti
+                                getOptionLabel={(option: Category) => option.name}
+                                getOptionValue={(option: Category) => String(option.id)}
+                                options={categories}
+                                placeholder="Categorias"
+                            />
+                            {errors.categories && (
+                                <div className="invalid-feedback d-block">
+                                    Campo obrigatório
+                                </div>
+                            )}
+                        </div>
                         <div className="margin-bottom-30">
                             <input
                                 ref={register({ required: "Campo Obrigatório" })}

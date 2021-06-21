@@ -12,9 +12,7 @@ const List = () => {
     const [productsResponse, setProductsResponse] = useState<ProductsResponse>();
     const [isLoading, setIsLoading] = useState(false);
     const [activePage, setActivePage] = useState(0);
-    const history = useHistory();
-
-    console.log(productsResponse);    
+    const history = useHistory();   
 
     const getProducts = useCallback(() => {
         const params = {
