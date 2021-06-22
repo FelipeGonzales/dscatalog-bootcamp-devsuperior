@@ -25,9 +25,8 @@ const Login = () => {
     const { from } = location.state || { from: { pathname: "/admin" } };
    
     const onSubmit  = (data: FormState) => {
-        console.log(data);
         makeLogin(data)
-        .then(response =>{
+        .then(response => {
             setHasError(false);
             saveSessionData(response.data);
             history.replace(from);
@@ -68,9 +67,10 @@ const Login = () => {
                <div className=  "margin-bottom-30">
                <input 
                 type="password" 
-                className={`form-control input-base ${errors.password ? 'is-invalid' : ''}`}
                 placeholder="Senha"
-                {...register("password", {required: "Campo origatório"})}
+                className={`form-control input-base ${errors.password ? 'is-invalid' : ''}`}
+                name="password"
+                ref={register({required: "Campo origatório"})}
                 />
                  {errors.password && (
                     <div className="invalid-feedback d-block">
@@ -79,10 +79,10 @@ const Login = () => {
                )}
                </div>
                 <Link to="/auth/recover" className="login-link-recover">
-                    Esqueci a senha ?
+                    Esqueceu a senha ?
                 </Link>
                 <div className="login-submit">
-                <ButtonIcon text="logar" />
+                <ButtonIcon text="Logar" />
                 </div>
                 <div className="text-center">
                 <span className= "not-registered">
