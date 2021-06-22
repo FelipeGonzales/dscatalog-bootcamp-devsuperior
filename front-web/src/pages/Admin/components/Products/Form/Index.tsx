@@ -7,8 +7,9 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { Category } from 'core/types/Product';
 import Select from 'react-select';
+import PriceField from './PriceField';
 
-type FormState = {
+export type FormState = {
     name: string;
     price: string;
     description: string;
@@ -37,9 +38,17 @@ const Form = () => {
                     setValue('price', response.data.price);
                     setValue('description', response.data.description);
                     setValue('imgUrl', response.data.imgUrl);
+                    setValue('categories', response.data.categories);
                 })
         }
     }, [productId, isEditing, setValue]);
+
+    useEffect(() => {
+        setIsLoadingCategories(true);
+        makeRequest({ url: '/categories' })
+            .then(response => setCategories(response.data.content))
+            .finally(() => setIsLoadingCategories(false));
+    }, [])
     
     const onSubmit = (data: FormState) => {
 
@@ -95,6 +104,7 @@ return (
                                 getOptionValue={(option: Category) => String(option.id)}
                                 options={categories}
                                 placeholder="Categorias"
+                                defaultValue=''
                             />
                             {errors.categories && (
                                 <div className="invalid-feedback d-block">
@@ -103,13 +113,7 @@ return (
                             )}
                         </div>
                         <div className="margin-bottom-30">
-                            <input
-                                ref={register({ required: "Campo Obrigatório" })}
-                                name="price"
-                                type="number"
-                                className="form-control  input-base"
-                                placeholder="Preço"
-                            />
+                        <PriceField control={control}/>
                             {errors.price && (
                                 <div className="invalid-feedback d-block">
                                     {errors.price.message}
