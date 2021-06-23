@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { Category } from 'core/types/Product';
 import Select from 'react-select';
 import PriceField from './PriceField';
+import ImageUpload from '../ImageUpload';
 
 export type FormState = {
     name: string;
@@ -27,6 +28,9 @@ const Form = () => {
     const { productId } = useParams<ParamsType>();
     const [isLoadingCategories, setIsLoadingCategories] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
+    const [uploadedImgUrl, setUploadedImgUrl] = useState('');
+    const [productImgUrl, setProductImgUrl] = useState('');
+   
     const isEditing = productId !== 'create';
     const formTitle = isEditing ? 'Editar produto' : 'Cadastrar um Produto';
 
@@ -37,8 +41,8 @@ const Form = () => {
                     setValue('name', response.data.name);
                     setValue('price', response.data.price);
                     setValue('description', response.data.description);
-                    setValue('imgUrl', response.data.imgUrl);
                     setValue('categories', response.data.categories);
+                    setProductImgUrl(response.data.imgUrl);
                 })
         }
     }, [productId, isEditing, setValue]);
@@ -51,11 +55,17 @@ const Form = () => {
     }, [])
     
     const onSubmit = (data: FormState) => {
+        const payload = {
+            ...data, 
+            imgUrl: uploadedImgUrl
+        }
+
+
 
         makePrivateRequest({
             url: isEditing ? `/products/${productId}` : '/products',
             method: isEditing ? 'PUT' : 'POST',
-            data
+            data: payload
         })
         .then(() => {
             toast.info('Produto salvo com sucesso!');
@@ -66,14 +76,19 @@ const Form = () => {
         })
      }
 
-return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-        <BaseForm 
-            title={formTitle}
-        >
-            <div className="row">
-                <div className="col-6">
-                <div className="margin-bottom-30">
+     const onUploadSuccess = (imgUrl: string) => {
+        setUploadedImgUrl(imgUrl);
+    }
+
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <BaseForm 
+                title={formTitle}
+            >
+                <div className="row">
+                    <div className="col-6">
+                        <div className="margin-bottom-30">
                             <input
                                 ref={register({
                                     required: "Campo Obrigatório",
@@ -121,18 +136,10 @@ return (
                             )}
                         </div>
                         <div className="margin-bottom-30">
-                            <input
-                                ref={register({ required: "Campo Obrigatório" })}
-                                name="imagUrl"
-                                type="text"
-                                className="form-control input-base"
-                                placeholder="Imagem do produto"
+                        <ImageUpload 
+                            onUploadSuccess={onUploadSuccess}
+                            productImgUrl={productImgUrl}
                             />
-                            {errors.imagUrl && (
-                                <div className="invalid-feedback d-block">
-                                    {errors.imagUrl.message}
-                                </div>
-                            )}
                         </div>
                 </div>
                 <div className="col-6">
