@@ -10,7 +10,10 @@ const PriceField = ({control}: Props) => (
         name='price'
         control={control}
         defaultValue=''
-        rules={{ required: false }}
+        rules={{
+            required: "Campo obrigatório",
+            setValueAs: (value: string) => value?.replace(',', '.') 
+        }}
         render={({ value, onChange }) => (
             <CurrencyInput
                 placeholder='Preço'

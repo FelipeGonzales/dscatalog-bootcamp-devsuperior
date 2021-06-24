@@ -26,3 +26,17 @@
         color: #407BFF;
     }
 }
+
+//tablet breakpoints
+@media (max-width: 768px){
+    .admin-base-form {
+        width: 100%;
+    }
+}
+//mobile breakpoints
+@media (max-width: 576px){
+    .admin-base-form {
+        width: 100%;
+        flex-direction: column;
+    }
+}
