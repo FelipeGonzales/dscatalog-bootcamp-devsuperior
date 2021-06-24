@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, ActivityIndicator, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SearchInput, ProductCard} from '../../components';
-import { getProducts } from '../../services';
+import { deleteProduct, getProducts } from '../../services';
 import { admin, text } from '../../styles';
 
 interface ProductProps {
@@ -23,6 +23,14 @@ const Products: React.FC<ProductProps> = (props) => {
         setLoading(false);
     };
 
+    async function handleDelete(id: number) {
+        setLoading(true);
+        const res = await deleteProduct(id);
+        fillProducts();
+        setLoading(false);
+    };
+
+
     useEffect(() => {
         fillProducts();
     },[]);
@@ -40,7 +48,7 @@ const Products: React.FC<ProductProps> = (props) => {
             <SearchInput placeholder={"Nome do produto"} search={search} setSearch={setSearch}/>
             {loading ? (<ActivityIndicator size="large" />) :
             (data.map((product) => (
-                <ProductCard {...product} key={product.id} role={"admin"}/>
+                <ProductCard {...product} key={product.id} role={"admin"} handleDelete={handleDelete}/>
             )))}
         </ScrollView>
     )
