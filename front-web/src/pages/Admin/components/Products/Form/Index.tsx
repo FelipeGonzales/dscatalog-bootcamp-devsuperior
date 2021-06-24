@@ -86,7 +86,7 @@ const Form = () => {
             <BaseForm 
                 title={formTitle}
             >
-                <div className="product-form-container">
+                <div className="row">
                     <div className="col-6">
                         <div className="margin-bottom-30">
                             <input
@@ -110,10 +110,7 @@ const Form = () => {
                             <Controller
                                 as={Select}
                                 name="categories"
-                                rules={{
-                                    required: true,
-                                    validate: (value: Category[]) => value?.length > 0 
-                                }}
+                                rules={{required: true}}
                                 control={control}
                                 isLoading={isLoadingCategories}
                                 classNamePrefix="categories-select"
