@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ActivityIndicator, ScrollView } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { SearchInput, ProductCard} from '../../components';
-import { getProducts } from '../../services';
-import { admin, text } from '../../styles';
+import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
+import  { ProductCard, SearchInput } from '../../components';
+import { ScrollView } from 'react-native-gesture-handler';
+import { admin, theme, text } from '../../styles';
+import { deleteProduct, getProducts } from '../../services';
 
 interface ProductProps {
     setScreen: Function;
+    setProductId: Function;
 }
 
-const Products: React.FC<ProductProps> = (props) => {
+const ListProducts: React.FC<ProductProps> = (props) => {
     const [search, setSearch] = useState("");
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
-    const {setScreen} = props;
-
+    const {setScreen, setProductId} = props;
 
     async function fillProducts() {
         setLoading(true);
@@ -22,6 +22,19 @@ const Products: React.FC<ProductProps> = (props) => {
         setProducts(res.data.content);
         setLoading(false);
     };
+
+    function handleEdit(id: number) {
+        setProductId(id);
+        setScreen("editProduct")
+    };
+
+    async function handleDelete(id: number) {
+        setLoading(true);
+        const res = await deleteProduct(id);
+        fillProducts();
+        setLoading(false);
+    };
+
 
     useEffect(() => {
         fillProducts();
@@ -40,10 +53,15 @@ const Products: React.FC<ProductProps> = (props) => {
             <SearchInput placeholder={"Nome do produto"} search={search} setSearch={setSearch}/>
             {loading ? (<ActivityIndicator size="large" />) :
             (data.map((product) => (
-                <ProductCard {...product} key={product.id} role={"admin"}/>
+                <ProductCard 
+                {...product} 
+                key={product.id} 
+                role={"admin"} 
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}/>           
             )))}
         </ScrollView>
     )
 }
 
-export default Products;
+export default ListProducts; 
