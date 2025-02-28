@@ -1,63 +1,62 @@
-# 🍕 DS Delivery  
+# 🛒 DS Catalog  
 
-Projeto realizado durante a **Semana DevSuperior 2.0** 🚀  
+DS Catalog é uma aplicação **Full Stack Web e Mobile** construída durante o **Bootcamp Spring React**, ministrado pela **DevSuperior**.  
 
-## 📖 Sobre  
-O **DS Delivery** tem por objetivo criar um sistema capaz de realizar pedidos em uma pizzaria fictícia.  
+## 📖 Sobre o Projeto  
+O software consiste em uma aplicação de catálogo de produtos, onde há três tipos de permissões:  
+✅ **Usuário não autenticado**: Pode apenas visualizar os produtos.  
+✅ **Usuário com perfil operador**: Pode adicionar categorias ou produtos.  
+✅ **Usuário administrador**: Pode gerenciar outros usuários da aplicação.  
 
-Durante o desenvolvimento foi criada uma API com quatro métodos:  
-
-- **`GET /orders`**: Retorna todos os pedidos do sistema que ainda estão pendentes.  
-- **`GET /products`**: Retorna todos os produtos disponíveis para a compra.  
-- **`POST /orders`**: Envia todas as informações do pedido que o cliente fez para o banco de dados.  
-- **`PUT /orders/{id}/delivered`**: Atualiza o status do pedido para **entregue**.  
-
-A landing page contém:  
-✅ Uma frase de efeito,  
-✅ Uma imagem,  
-✅ Um botão que leva o usuário à tela de pedidos.  
-
-Na página de pedidos, o cliente encontra:  
-📌 Orientações sobre o funcionamento do sistema,  
-📌 Lista de produtos disponíveis,  
-📌 Um mapa interativo para obter a localização,  
-📌 Botão para confirmar o pedido.  
+Neste projeto também foram abordados tópicos como:  
+✔️ **Testes com JUnit**  
+✔️ **Integração com armazenamento de imagens na AWS**  
+✔️ **CI/CD**  
+✔️ **Implantação com Docker e AWS**  
 
 ---
 
-## 🛠 Tecnologias  
+## 📐 Layout Web  
+Abaixo estão algumas capturas de tela da aplicação:  
 
-### **🔹 Front-end e Mobile**  
-- **HTML / CSS / JavaScript / TypeScript**  
-- **ReactJS**  
-- **React Native**  
-- **Expo**  
-- **Axios**  
+![Imagem 1](https://raw.githubusercontent.com/RangelMoreira/dscatalog/main/assets/home-frontend.png)
+![Imagem 2](https://raw.githubusercontent.com/RangelMoreira/dscatalog/main/assets/catalogo-frontend.png)
+![Imagem 3](https://raw.githubusercontent.com/RangelMoreira/dscatalog/main/assets/produtos-frontend.png)
+![Imagem 4](https://raw.githubusercontent.com/RangelMoreira/dscatalog/main/assets/produtos-edicao-frontend.png)
+![Imagem 5](https://raw.githubusercontent.com/RangelMoreira/dscatalog/main/assets/formulario-usuarios-frontend.png)
 
-### **🔹 Back-end**  
-- **Java**  
-- **Spring Boot**  
-- **JPA / Hibernate**  
-- **Maven**  
+---
 
-### **🔹 Implantação em Produção**  
-- **Front-end:** [Netlify](https://www.netlify.com/)  
-- **Back-end:** [Heroku](https://www.heroku.com/)  
+## 📊 Modelo Conceitual  
+![Imagem 6](https://raw.githubusercontent.com/RangelMoreira/dsdeliver-sds2/main/assets/modelo-conceitual.png)
+
+---
+
+## 🛠 Tecnologias Utilizadas  
+
+### 🔹 **Back-end**  
+- Java  
+- Spring Boot  
+- JPA / Hibernate  
+- Maven  
+- OAuth / JWT  
+- JUnit  
+
+### 🔹 **Front-end**  
+- HTML / CSS / Sass / Bootstrap / JavaScript / TypeScript  
+- ReactJS  
+- Axios  
+- React Hook Forms  
+- React Select  
+
+### 🔹 **Implantação em Produção**  
+- **Back-end:** Heroku  
+- **Front-end:** Netlify  
 - **Banco de Dados:** PostgreSQL  
+- **Upload de Imagens:** Amazon S3  
 
 ---
 
-## 👨‍💻 Instalação  
-
-Para instalar as ferramentas necessárias para o desenvolvimento do projeto, siga os guias abaixo de acordo com o seu sistema operacional:  
-
-🔗 **[Guia de instalação para Windows]([#](https://github.com/devsuperior/sds1/tree/master/ferramentas/windows))**  
-🔗 **[Guia de instalação para Linux]([#](https://github.com/devsuperior/sds1/tree/master/ferramentas/linux))**  
-🔗 **[Guia de instalação para macOS]([#](https://github.com/devsuperior/sds1/tree/master/ferramentas/mac))**  
-
----
-
-🚀 **Projeto desenvolvido durante a Semana DevSuperior 2.0**.  
-📌 **Autor:** *Felipe Gonzales*  
-📬 **Contato:** *www.linkedin.com/in/felipe-gonzales1*  
-
+## 📬 Autor  
+👤 **Felipe Gonzales**  
+🔗 [LinkedIn](https://www.linkedin.com/in/felipe-gonzales1)  
